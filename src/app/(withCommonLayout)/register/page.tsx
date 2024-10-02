@@ -1,22 +1,35 @@
-'use client'
+"use client";
 import FXForm from "@/src/components/form/FXForm";
 import FXInput from "@/src/components/form/FXInput";
+import { useUserRegistration } from "@/src/hooks/auth.hook";
 import loginValidationSchema from "@/src/schemas/login.schema.";
 import registerValidationSchema from "@/src/schemas/register.schema";
 import { registerUser } from "@/src/services/AuthService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@nextui-org/button";
+import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
+import { useEffect } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 
 const RegisterPage = () => {
-  const onSubmit: SubmitHandler<FieldValues> = async(data) => {
-    const userData={
-      ...data,
-      profilePhoto:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkGk3FTMunVUkjWIqqaXImbVXA7o6i7BENYQ&s"
-    }
+ 
+  const {mutate:handleUserRegistration, isPending} = useUserRegistration()
 
-    registerUser(userData)
+  useEffect(()=>{
+    if (isPending) {
+      //handle loading state
+    }
+  },[isPending])
+ 
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const userData = {
+      ...data,
+      profilePhoto:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkGk3FTMunVUkjWIqqaXImbVXA7o6i7BENYQ&s",
+    };
+
+    handleUserRegistration(userData);
   };
 
   return (
@@ -25,12 +38,12 @@ const RegisterPage = () => {
       <p className="mb-4">Welcome Back! Let&lsquo;s Get Started</p>
       <div className="w-[35%]">
         <FXForm
-        defaultValues={{
-            name:"mir",
-            email:"mir@gmail.com",
-            mobileNumber:"12323213",
-            password:"123123"
-        }}
+          defaultValues={{
+            name: "mir",
+            email: "mir@gmail.com",
+            mobileNumber: "12323213",
+            password: "123123",
+          }}
           onSubmit={onSubmit}
           resolver={zodResolver(registerValidationSchema)}
         >
