@@ -1,38 +1,56 @@
-"use server"
+"use server";
 
-import axiosInstance from "@/src/lib/AxiosInstance"
-import { cookies } from "next/headers"
-import { FieldValues } from "react-hook-form"
+import axiosInstance from "@/src/lib/AxiosInstance";
+import { jwtDecode } from "jwt-decode";
+import { cookies } from "next/headers";
+import { FieldValues } from "react-hook-form";
 
-export const registerUser =async(userData: FieldValues)=>{
-    try{
+export const registerUser = async (userData: FieldValues) => {
+  try {
+    const { data } = await axiosInstance.post("/auth/register", userData);
 
-        const {data} =  await axiosInstance.post("/auth/register",userData)
-
-        if (data.success) {
-            cookies().set("accessToken", data?.data?.accessToken)
-            cookies().set("refreshToken", data?.data?.refreshToken)
-        }
-
-        return data;
-    }catch(err :any){
-        throw new Error(err)
+    if (data.success) {
+      cookies().set("accessToken", data?.data?.accessToken);
+      cookies().set("refreshToken", data?.data?.refreshToken);
     }
-}
 
+    return data;
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
 
-export const loginUser =async(userData: FieldValues)=>{
-    try{
+export const loginUser = async (userData: FieldValues) => {
+  try {
+    const { data } = await axiosInstance.post("/auth/login", userData);
 
-        const {data} =  await axiosInstance.post("/auth/login",userData)
-
-        if (data.success) {
-            cookies().set("accessToken", data?.data?.accessToken)
-            cookies().set("refreshToken", data?.data?.refreshToken)
-        }
-
-        return data;
-    }catch(err :any){
-        throw new Error(err)
+    if (data.success) {
+      cookies().set("accessToken", data?.data?.accessToken);
+      cookies().set("refreshToken", data?.data?.refreshToken);
     }
-}
+
+    return data;
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
+export const getCurrentUser = async () => {
+  const accessToken = cookies().get("accessToken")?.value;
+
+  let decodedToken = null;
+
+  if (accessToken) {
+    decodedToken = await jwtDecode(accessToken);
+
+    return {
+      _id: decodedToken?._id,
+      name: decodedToken?.name,
+      email: decodedToken?.email,
+      mobileNumber: decodedToken?.mobileNumber,
+      role: decodedToken?.role,
+      status: decodedToken?.status,
+    };
+  }
+  return decodedToken;
+};
