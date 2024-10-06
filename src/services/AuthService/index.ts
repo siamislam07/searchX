@@ -35,6 +35,11 @@ export const loginUser = async (userData: FieldValues) => {
   }
 };
 
+export const logout = async()=>{
+  cookies().delete("accessToken")
+  cookies().delete("refreshToken")
+}
+
 export const getCurrentUser = async () => {
   const accessToken = cookies().get("accessToken")?.value;
 
@@ -50,6 +55,7 @@ export const getCurrentUser = async () => {
       mobileNumber: decodedToken?.mobileNumber,
       role: decodedToken?.role,
       status: decodedToken?.status,
+      profilePhoto:decodedToken?.profilePhoto
     };
   }
   return decodedToken;

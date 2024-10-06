@@ -1,5 +1,7 @@
 "use client";
 
+import { useUser } from "@/src/context/user.provider";
+import { logout } from "@/src/services/AuthService";
 import { Avatar } from "@nextui-org/avatar";
 
 import {
@@ -7,12 +9,18 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@nextui-org/dropdown";
-import Link from "next/link";
+} from "@nextui-org/dropdown"; 
 import { useRouter } from "next/navigation";
 
 const NavbarDropDown = () => {
+  
   const router = useRouter();
+  const {setIsLoading:userLoading}  = useUser()
+
+  const handleLogout= ()=>{
+    logout()
+    userLoading(true)
+  }
 
   const handleNavigation = (pathname: string) => {
     router.push(pathname);
@@ -36,7 +44,9 @@ const NavbarDropDown = () => {
           Create Post
         </DropdownItem>
 
-        <DropdownItem className="text-danger" color="danger">
+        <DropdownItem
+        onClick={()=> handleLogout()}
+        className="text-danger" color="danger">
           Logout
         </DropdownItem>
       </DropdownMenu>

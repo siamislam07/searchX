@@ -4,19 +4,17 @@ import { getCurrentUser } from "./services/AuthService";
 
 const AuthRoutes = ["/login", "/register"];
 
-type Role= keyof typeof roleBaseRoutes
+type Role = keyof typeof roleBaseRoutes;
 
 const roleBaseRoutes = {
-  USER:[/^\/profile/],
-  ADMIN:[/^\/admin/]
-}
+  USER: [/^\/profile/],
+  ADMIN: [/^\/admin/],
+};
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
 
-  const {pathname}= request.nextUrl;
-
-  
   // const user = {
   //   name: "fury",
   //   token: "asfasf",
@@ -26,18 +24,19 @@ export async function middleware(request: NextRequest) {
 
   if (!user) {
     if (AuthRoutes.includes(pathname)) {
-      return NextResponse.next()
-    } else{
-      return NextResponse.redirect(new URL("/login", request.url))
+      return NextResponse.next();
+    } else {
+      return NextResponse.redirect(
+        new URL(`/login?redirect=${pathname}`, request.url)
+      );
     }
   }
 
-  if (user?.role && roleBaseRoutes[user?.role as Role] ) {
-    const route = roleBaseRoutes[user?.role as Role]
+  if (user?.role && roleBaseRoutes[user?.role as Role]) {
+    const route = roleBaseRoutes[user?.role as Role];
 
-    if (route.some((route)=>pathname.match(route))) {
-      
-      return NextResponse.next()
+    if (route.some((route) => pathname.match(route))) {
+      return NextResponse.next();
     }
   }
 
@@ -46,5 +45,5 @@ export async function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/profile", "/admin", "/login","/register"],
+  matcher: ["/profile", "/profile/:page*", "/admin", "/login", "/register"],
 };

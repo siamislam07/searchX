@@ -1,3 +1,4 @@
+"use client"
 import {
   Navbar as NextUINavbar,
   NavbarContent,
@@ -17,10 +18,11 @@ import clsx from "clsx";
 
 import { siteConfig } from "@/src/config/site";
 import { ThemeSwitch } from "@/src/components/UI/theme-switch";
-import {   Logo } from "@/src/components/icons";
+import { Logo } from "@/src/components/icons";
 import { Avatar } from "@nextui-org/avatar";
 import NavbarDropDown from "./NavbarDropDown";
- 
+import { useUser } from "@/src/context/user.provider";
+
 export const Navbar = () => {
   // const searchInput = (
   //   <Input
@@ -42,6 +44,8 @@ export const Navbar = () => {
   //     type="search"
   //   />
   // );
+
+  const { user } = useUser();
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
@@ -78,10 +82,15 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
 
-        <NavbarItem className="hidden sm:flex gap-2">
-         
-         <NavbarDropDown/>
-        </NavbarItem>
+        {user?.email ? (
+          <NavbarItem className="hidden sm:flex gap-2">
+            <NavbarDropDown />
+          </NavbarItem>
+        ) : (
+          <NavbarItem className="hidden sm:flex gap-2">
+            <Link href="/login">Login</Link>
+          </NavbarItem>
+        )}
         {/* <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>  */}
       </NavbarContent>
 
