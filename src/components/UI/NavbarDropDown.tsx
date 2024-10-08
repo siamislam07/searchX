@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 const NavbarDropDown = () => {
   
   const router = useRouter();
-  const {setIsLoading:userLoading}  = useUser()
+  const {user,setIsLoading:userLoading}  = useUser()
 
   const handleLogout= ()=>{
     logout()
@@ -29,7 +29,7 @@ const NavbarDropDown = () => {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Avatar name="aihay" className="cursor-pointer" />
+        <Avatar  src={user?.profilePhoto} className="cursor-pointer" />
       </DropdownTrigger>
       <DropdownMenu aria-label="Static Actions">
         <DropdownItem onClick={() => handleNavigation("/profile")}>
