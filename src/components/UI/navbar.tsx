@@ -88,7 +88,9 @@ export const Navbar = () => {
           </NavbarItem>
         ) : (
           <NavbarItem className="hidden sm:flex gap-2">
-            <Link href="/login">Login</Link>
+            <Link href="/login">
+            <Button>Login</Button>
+            </Link>
           </NavbarItem>
         )}
         {/* <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>  */}
