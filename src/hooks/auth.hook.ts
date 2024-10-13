@@ -8,11 +8,11 @@ export const useUserRegistration = () => {
     mutationKey: ["USER_REGISTRATION"],
     mutationFn: async (userData) => await registerUser(userData),
     onSuccess: () => {
-      toast.success("User Registration successful")
+      toast.success("User Registration successful");
     },
-    onError:(err)=>{
-        toast.error(err.message)
-    }
+    onError: (err) => {
+      toast.error(err.message);
+    },
   });
 };
 
@@ -21,10 +21,10 @@ export const useUserLogin = () => {
     mutationKey: ["USER_LOGIN"],
     mutationFn: async (userData) => await loginUser(userData),
     onSuccess: () => {
-      toast.success("User login successful")
+      toast.success("User login successful");
     },
-    onError:(err)=>{
-        toast.error(err.message)
-    }
+    onError: (err) => {
+      toast.error(err.message);
+    },
   });
 };
