@@ -6,7 +6,7 @@ import FXSelect from "@/src/components/form/FXSelect";
 import FXTextarea from "@/src/components/form/FXTextArea";
 import Loading from "@/src/components/UI/Loading";
 import { useUser } from "@/src/context/user.provider";
-import { useGetCategories } from "@/src/hooks/categories.hook";
+import { useAddClaimRequest } from "@/src/hooks/categories.hook";
 import useCreatePost from "@/src/hooks/post.hook";
 import dateToISO from "@/src/utils/dateToISO";
 import { allDistict as allDistrict } from "@bangladeshi/bangladesh-address";
@@ -50,7 +50,7 @@ const CreatePost = () => {
     data: categoriesData,
     isLoading: categoryLoading,
     isSuccess: categorySuccess,
-  } = useGetCategories();
+  } = useAddClaimRequest();
 
   let categoryOption: { key: string; label: string }[] = [];
 
