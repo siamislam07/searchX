@@ -23,6 +23,7 @@ import {
   useForm,
 } from "react-hook-form";
 import { string } from "zod";
+import generateDescription from "@/src/services/ImageDescription";
 
 const cityOptions = allDistrict()
   .sort()
@@ -36,6 +37,8 @@ const cityOptions = allDistrict()
 const CreatePost = () => {
   const [imageFiles, setImageFiles] = useState<File[] | []>([]);
   const [imagePreviews, setImagePreviews] = useState<string[] | []>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("")
 
   const router = useRouter();
 
@@ -104,6 +107,23 @@ const CreatePost = () => {
         setImagePreviews((prev) => [...prev, reader.result as string]);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDescriptionGeneration = async () => {
+    setIsLoading(true);
+    try {
+      const response = await generateDescription(
+        imagePreviews[0],
+        "write a description for social media post describing the given image that starts 'Found this...'"
+      );
+
+      methods.setValue("description", response);
+      setIsLoading(false);
+    } catch (err:any) {
+      console.log(err);
+      setError(err.message)
+      setIsLoading(false);
     }
   };
 
@@ -181,6 +201,21 @@ const CreatePost = () => {
               <div className="min-w-fit flex-1">
                 <FXTextarea label="Description" name="description" />
               </div>
+            </div>
+
+            <div className="flex justify-end gap-3">
+              {methods.getValues("description") && (
+                <Button onClick={() => methods.resetField("description")}>
+                  Clear
+                </Button>
+              )}
+              <Button
+                isDisabled={imagePreviews.length > 0 ? false : true}
+                isLoading={isLoading}
+                onClick={() => handleDescriptionGeneration()}
+              >
+                {isLoading ? "Generating..." : "Generate with ai"}
+              </Button>
             </div>
 
             <Divider className="my-5" />
