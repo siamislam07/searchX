@@ -33,8 +33,10 @@ axiosInstance.interceptors.response.use(
     const config = error.config
 
     if (error?.response?.status===401&& !config?.sent) {
+
       config.send=true
-      const config = error.config
+
+      
 
       const res = await getNewAccessToken()
       const accessToken = res.data.accessToken
