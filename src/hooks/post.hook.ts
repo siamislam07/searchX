@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import createPost from "../services/post";
+import { createPost } from "../services/post";
+// import createPost from "../services/post";
 
 const useCreatePost = () => {
   return useMutation<any, Error, FormData>({

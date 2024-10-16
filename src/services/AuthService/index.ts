@@ -60,3 +60,22 @@ export const getCurrentUser = async () => {
   }
   return decodedToken;
 };
+
+
+export const getNewAccessToken = async()=>{
+  try{
+    const refreshToken= cookies().get("refreshToken")?.value
+    const res =await axiosInstance({
+      url:"/auth/refresh-token",
+      method:"POST",
+      withCredentials:true,
+      headers:{
+        cookies: `refreshToken=${refreshToken}`
+      }
+    })
+
+    return res.data
+  }catch(err){
+throw new Error("Failed to get new access token")
+  }
+}
